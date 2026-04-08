@@ -1,4 +1,5 @@
-import { fetchAPI } from '../api.js';
+
+import { fetchAPI, API_URL } from '../api.js';
 import { navigateTo } from '../main.js';
 
 export const renderLogin = (container) => {

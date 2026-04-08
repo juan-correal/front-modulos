@@ -14,25 +14,24 @@ export const navigateTo = async (route) => {
   app.innerHTML = '';
   
   if (route !== '/login') {
-    // Verificar si estamos autenticados para entrar a cualquier otra area
     const res = await fetchAPI('/auth/perfil');
     if (!res.ok) {
       return navigateTo('/login');
     }
-    
-    if (route === '/dashboard') renderDashboard(app);
-    else if (route === '/medicos') renderMedicos(app);
-    else if (route === '/recetas') renderRecetas(app);
-    else renderDashboard(app); // fallback to dashboard if authenticated
+
+    const userData = res.data?.usuario || res.usuario;
+
+    if (route === '/dashboard') renderDashboard(app, userData);
+    else if (route === '/medicos') renderMedicos(app, userData);
+    else if (route === '/recetas') renderRecetas(app, userData);
+    else renderDashboard(app, userData); 
   } else {
-    // Login es por defecto
     renderLogin(app);
   }
 };
 
 window.addEventListener('hashchange', () => {
   const path = window.location.hash.replace('#', '') || '/login';
-  // En un esquema real, hay que validar que no re-cargemos si ya estamos ahí, pero por simplicidad:
   navigateTo(path);
 });
 
